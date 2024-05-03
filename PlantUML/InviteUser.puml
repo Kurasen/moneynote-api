@@ -1,0 +1,18 @@
+@startuml
+participant 用户
+用户 -> GroupController : 发送邀请\nhandleInviteUser()
+activate GroupController
+GroupController -> GroupService : inviteUser()
+activate GroupService
+GroupService -> UserRepository : 查找被邀请用户\nfindOneByUsername()
+activate UserRepository
+UserRepository --> GroupService
+deactivate UserRepository
+GroupService -> UserGroupRelationRepository : 若找不到对应用户，则抛出异常\nItemNotFoundException::new
+activate UserGroupRelationRepository
+UserGroupRelationRepository --> GroupService
+deactivate UserGroupRelationRepository
+GroupService --> GroupController
+deactivate GroupService
+return
+@enduml

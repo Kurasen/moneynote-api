@@ -1,0 +1,18 @@
+@startuml
+participant 用户
+用户 -> BalanceFlowController : 处理退款\nhandleRefund()
+activate BalanceFlowController
+BalanceFlowController -> BalanceFlowService : 退款\nrefund()
+activate BalanceFlowService
+BalanceFlowService -> BaseService : 查找流水\nfindFlowById()
+activate BaseService
+BaseService --> BalanceFlowService
+deactivate BaseService
+BalanceFlowService -> FlowFileRepository : 删除流水\ndeleteByFlow()
+activate FlowFileRepository
+FlowFileRepository --> BalanceFlowService
+deactivate FlowFileRepository
+BalanceFlowService --> BalanceFlowController
+deactivate BalanceFlowService
+return
+@enduml

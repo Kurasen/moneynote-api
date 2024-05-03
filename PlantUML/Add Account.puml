@@ -1,0 +1,26 @@
+@startuml
+participant 用户
+用户 -> AccountController : 发送添加请求\nhandleAdd()
+activate AccountController
+AccountController -> AccountService : add()
+activate AccountService
+AccountService -> AccountRepository : 检查账户组中账户的数量是否超过最大限制\ncountByGroup()
+activate AccountRepository
+AccountRepository --> AccountService
+deactivate AccountRepository
+AccountService -> AccountRepository : 检查是否存在具有相同组和名称的账户\nexistsByGroupAndName
+activate AccountRepository
+AccountRepository --> AccountService
+deactivate AccountRepository
+AccountService -> AccountMapper : 转换为 Account 实体对象\ntoEntity()
+activate AccountMapper
+AccountMapper --> AccountService
+deactivate AccountMapper
+AccountService -> CurrencyService : 查货币代码\ncheckCode()
+activate CurrencyService
+CurrencyService --> AccountService
+deactivate CurrencyService
+AccountService --> AccountController
+deactivate AccountService
+return
+@enduml

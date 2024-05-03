@@ -1,0 +1,26 @@
+@startuml
+participant 用户
+用户 -> CategoryController : 发送修改请求\nhandleUpdate()
+activate CategoryController
+CategoryController -> CategoryService : update()
+activate CategoryService
+CategoryService -> BaseService : 查找需要更新的分类\nfindCategoryById()
+activate BaseService
+BaseService --> CategoryService
+deactivate BaseService
+CategoryService -> BaseService : 进一步验证是否修改父类分类\nfindCategoryById()
+activate BaseService
+BaseService --> CategoryService
+deactivate BaseService
+CategoryService -> CategoryRepository : 检查是否重名\nexistsByBookAndParentAndTypeAndName()
+activate CategoryRepository
+CategoryRepository --> CategoryService
+deactivate CategoryRepository
+CategoryService -> CategoryMapper : 更新分类实体\nupdateEntity()
+activate CategoryMapper
+CategoryMapper --> CategoryService
+deactivate CategoryMapper
+CategoryService --> CategoryController
+deactivate CategoryService
+return
+@enduml

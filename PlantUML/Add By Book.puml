@@ -1,0 +1,30 @@
+@startuml
+participant Actor
+Actor -> BookController : 发起创建请求\nhandleAddByBook()
+activate BookController
+BookController -> BookService : addByBook()
+activate BookService
+BookService -> BaseService : 获取模板账本信息\ngetBookInGroup()
+activate BaseService
+BaseService -> TagMapper : 将账本标签实体转换为详细信息对象\nTagMapper::toDetails()
+activate TagMapper
+TagMapper -> IdAndNameMapper : 将账本标签的父级实体转换为详细信息对象\ntoDetails()
+activate IdAndNameMapper
+IdAndNameMapper --> TagMapper
+deactivate IdAndNameMapper
+TagMapper --> BaseService
+deactivate TagMapper
+BaseService -> CategoryMapper : 将账本的分类实体转换为详细信息对象\nCategoryMapper::toDetails()
+activate CategoryMapper
+CategoryMapper -> IdAndNameMapper : 将账本的分类的父级实体转换为详信息对象\ntoDetails()
+activate IdAndNameMapper
+IdAndNameMapper --> CategoryMapper
+deactivate IdAndNameMapper
+CategoryMapper --> BaseService
+deactivate CategoryMapper
+BaseService --> BookService
+deactivate BaseService
+BookService --> BookController
+deactivate BookService
+return
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+participant 用户
+用户 -> UserController : 点击注册
+activate UserController
+UserController -> UserService : register()
+activate UserService
+UserService -> UserRepository : 是否存在具有相同用户名\nexistsByUsername()
+activate UserRepository
+UserRepository --> UserService
+deactivate UserRepository
+UserService -> MessageSourceUtil : getMessage()
+activate MessageSourceUtil
+MessageSourceUtil -> MessageSourceUtil : getMessage()
+activate MessageSourceUtil
+MessageSourceUtil -> MessageSourceUtil : getMessage()
+activate MessageSourceUtil
+MessageSourceUtil --> MessageSourceUtil
+deactivate MessageSourceUtil
+MessageSourceUtil --> MessageSourceUtil
+deactivate MessageSourceUtil
+MessageSourceUtil --> UserService
+deactivate MessageSourceUtil
+UserService -> BookService : 设置默认账本\nsetBookByBookTemplate()
+activate BookService
+BookService -> BookRepository : 检查账本是否存在具有相同组和名称的账本\nexistsByGroupAndName()
+activate BookRepository
+BookRepository -> BookService : 返回结果
+activate BookService
+BookService -> PayeeMapper : 转换为 Payee 对\n象toEntity()
+activate PayeeMapper
+PayeeMapper --> BookService
+deactivate PayeeMapper
+BookService --> BookRepository
+deactivate BookService
+BookRepository --> BookService
+deactivate BookRepository
+BookService --> UserService
+deactivate BookService
+UserService --> UserController
+deactivate UserService
+return
+@enduml

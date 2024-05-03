@@ -1,0 +1,26 @@
+@startuml
+participant 用户
+用户 -> ReportController : 发送查询请求\nhandleExpenseCategory()
+activate ReportController
+ReportController -> ReportService : 进行查询\nreportCategory()
+activate ReportService
+ReportService -> BaseService : 获取账本信息\ngetBookInGroup()
+activate BaseService
+BaseService --> ReportService
+deactivate BaseService
+ReportService -> CategoryRepository : 获取特定类型分类信息\nfindAllByBookAndType()
+activate CategoryRepository
+CategoryRepository --> ReportService
+deactivate CategoryRepository
+ReportService -> CategoryReportQueryForm : 构建查询条件\nbuildCategoryPredicate()
+activate CategoryReportQueryForm
+CategoryReportQueryForm --> ReportService
+deactivate CategoryReportQueryForm
+ReportService -> BaseRepository : 获取报表数据\nfindAll()
+activate BaseRepository
+BaseRepository --> ReportService
+deactivate BaseRepository
+ReportService --> ReportController
+deactivate ReportService
+return
+@enduml

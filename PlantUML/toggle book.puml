@@ -1,0 +1,19 @@
+@startuml
+participant Actor
+Actor -> BookController : 发送恢复请求\nhandleToggle()
+
+activate BookController
+BookController -> BookService : 执行恢复账本操作\ntoggle()
+activate BookService
+BookService -> BaseService : 获取账本信息\ngetBookInGroup()
+activate BaseService
+BaseService --> BookService
+deactivate BaseService
+BookService -> UserRepository : 查找默认账本\nfindByDefaultBook()
+activate UserRepository
+UserRepository --> BookService
+deactivate UserRepository
+BookService --> BookController
+deactivate BookService
+return
+@enduml
