@@ -1,2 +1,1 @@
-# MoneyNote API
 MiniAccounting-api
